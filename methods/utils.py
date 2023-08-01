@@ -1,7 +1,8 @@
 import pickle
 import random
-from templates import summary_template
+from agents.flant5 import AgentFlan
 import wikipediaapi
+from .templates import templates
 
 
 def get_graph():
@@ -64,18 +65,49 @@ def rand_end(graph):
     return all_links[random.randint(0, len(all_links) - 1)]
 
 
+def format_options(opts):
+    return "- " + "\n- ".join(opts)
+
+
 def get_summary(page, agent):
+    """Queries the agent for a summary of the Wikipedia page
+
+    Gets the summary of the Wikipedia page using the Wikipedia API, then gets
+    the agent to summarize it
+
+    Parameters
+    ----------
+    page : str
+        The page to be summarized
+    agent : AgentFlan
+        The agent that will summarize the page
+
+    Returns
+    -------
+    str
+        Returns a string of the description of the Wikipedia page
+    """
+
     wiki_wiki = wikipediaapi.Wikipedia(
-        f'Bacon LLM (gxcheng@ucsd.edu)', 'en')
+        f'Interacting LLM', 'en')
 
     page_py = wiki_wiki.page(page)
     desc = page_py.summary
 
-    inputs = summary_template.format(page=page, desc=desc)
+    inputs = templates['summary'].format(page=page, desc=desc)
     summary = agent.raw_prompt(inputs, max_len=200)
 
     return summary
 
 
-def format_options(opts):
-    return "- " + "\n- ".join(opts)
+def setup():
+    agent = AgentFlan()
+
+    graph = get_pruned_graph()
+    # start = rand_start(graph)
+    # end = rand_start(graph)
+    start, end = ("Bacon soup", "Ostrich meat")
+
+    desc = get_summary(end, agent)
+
+    return (agent, start, end, desc, graph)

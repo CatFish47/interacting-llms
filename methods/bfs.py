@@ -1,8 +1,7 @@
 from collections import deque, defaultdict
-from utils import rand_start, rand_end, get_pruned_graph
 
 
-def shortest_dist(start, end):
+def bfs(graph, start, end):
     explored = set()
     queue = deque()
     queue.append(start)
@@ -36,15 +35,3 @@ def shortest_dist(start, end):
                         parents[node] = curr
 
     return []
-
-graph = get_pruned_graph()
-start = rand_start(graph)
-end = rand_start(graph)
-start = "Vegetarianism"
-end = "Industrial Revolution"
-start, end = ("Bacon soup", "Ostrich meat")
-path = shortest_dist(start, end)
-path_str = ", ".join(path)
-
-print(
-    f"There are {len(path) - 1} links between the Wikipedia pages for {start} and {end}: [{path_str}]")
