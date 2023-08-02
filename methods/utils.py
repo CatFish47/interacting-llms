@@ -5,18 +5,46 @@ import wikipediaapi
 from .templates import templates
 
 
-def get_graph():
+def get_graph(path):
+    """Retrieves the graph from a path
+
+    Parameters
+    ----------
+    path : str
+        The path to the pkl file of the graphs
+
+    Returns
+    -------
+    defaultdict
+        The graph
+    """
+
     graph = None
 
     # Read dictionary pkl file
-    with open('wikiscrape/graph.pkl', 'rb') as fp:
+    with open(path, 'rb') as fp:
         graph = pickle.load(fp)
 
     return graph
 
 
-def get_pruned_graph():
-    graph = get_graph()
+def get_pruned_graph(path):
+    """Removes sink nodes from graph
+
+    Removes nodes in graph that are dead-ends
+
+    Parameters
+    ----------
+    path : str
+        The path to the pkl file of the graph
+
+    Returns
+    -------
+    defaultdict
+        The pruned graph
+    """
+
+    graph = get_graph(path)
 
     explored_links = set(graph.keys())
 
@@ -31,29 +59,45 @@ def get_pruned_graph():
     return graph
 
 
-def get_graph_large():
-    graph = None
-
-    # Read dictionary pkl file
-    with open('wikiscrape/archive/graph_large.pkl', 'rb') as fp:
-        graph = pickle.load(fp)
-
-    return graph
-
-
 def rand_start(graph):
-    '''
-    This function generates a random start node from all nodes with outgoing edges
-    '''
+    """Generates a start node given the graph
+
+    Chooses a random non-sink vertex from the graph
+
+    Parameters
+    ----------
+    graph : defaultdict
+        A dictionary where the key is a link and the value is a set containing
+        all possible links from the key link
+
+    Returns
+    -------
+    str
+        The name of the starting vertex
+    """
+
     nodes = list(graph.keys())
 
     return nodes[random.randint(0, len(nodes) - 1)]
 
 
 def rand_end(graph):
-    '''
-    This function generates a random end node from all possible nodes in the graph
-    '''
+    """Generates an end node given the graph
+
+    Chooses a random vertex from the graph
+
+    Parameters
+    ----------
+    graph : defaultdict
+        A dictionary where the key is a link and the value is a set containing
+        all possible links from the key link
+
+    Returns
+    -------
+    str
+        The name of the ending vertex
+    """
+
     explored_links = set(graph.keys())
     all_links = set()
 
@@ -66,6 +110,22 @@ def rand_end(graph):
 
 
 def format_options(opts):
+    """Formats the options provided for the template
+
+    Separates all options with a dash, space and a new line character.
+    (e.g. "- Option 1")
+
+    Parameters
+    ----------
+    opts : list, set
+        All options in list/set format
+
+    Returns
+    -------
+    str
+        A description of the Wikipedia page
+    """
+
     return "- " + "\n- ".join(opts)
 
 
@@ -85,7 +145,7 @@ def get_summary(page, agent):
     Returns
     -------
     str
-        Returns a string of the description of the Wikipedia page
+        A description of the Wikipedia page
     """
 
     wiki_wiki = wikipediaapi.Wikipedia(
@@ -101,9 +161,19 @@ def get_summary(page, agent):
 
 
 def setup():
+    """Sets up necessary variables for Wikirace
+
+    Sets up the agent, graph, description, and start/end nodes.
+
+    Returns
+    -------
+    (AgentFlan, str, str, str, defaultdict)
+        A 5-tuple with (in order) the agent, start, end, description, and graph
+    """
+
     agent = AgentFlan()
 
-    graph = get_pruned_graph()
+    graph = get_pruned_graph('wikiscrape/graph.pkl')
     # start = rand_start(graph)
     # end = rand_start(graph)
     start, end = ("Bacon soup", "Ostrich meat")

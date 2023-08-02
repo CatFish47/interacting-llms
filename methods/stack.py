@@ -1,7 +1,8 @@
 from .consult import prompt_consult
 
 
-def prompt_stack(agent, goal, links, desc, path, graph, iters=3, max_per=20, ensemble_num=3):
+def prompt_stack(agent, goal, links, desc, path, graph, iters=3, max_per=20,
+                 ensemble_num=3):
     """Queries agents from consult, divide and conquer, and ensemble
 
     This will run the prompts through divide and conquer where each
@@ -36,4 +37,5 @@ def prompt_stack(agent, goal, links, desc, path, graph, iters=3, max_per=20, ens
         The link that the agent suggests clicking on
     """
 
-    return prompt_consult(iters, agent, goal, links, desc, path, True, graph, max_per, ensemble_num)
+    return prompt_consult(iters, agent, goal, links, desc, path, True, graph,
+                          max_per, ensemble_num)

@@ -4,7 +4,8 @@ from .templates import templates
 from .singular import prompt_agent
 
 
-def prompt_ensemble(num, agent, goal, links, desc, template='general', bads=[]):
+def prompt_ensemble(num, agent, goal, links, desc, template='general',
+                    bads=[]):
     """Queries an ensemble of agents for the next link
 
     Prompts multiple agents for a link by providing it with information

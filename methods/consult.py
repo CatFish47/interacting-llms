@@ -95,7 +95,8 @@ def consult_relativity(agent, goal, choice, desc):
     return out
 
 
-def prompt_consult(iters, agent, goal, links, desc, path, stack=False, graph=None, max_per=20, ensemble_num=3):
+def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
+                   graph=None, max_per=20, ensemble_num=3):
     """Queries a series of consultation agents for the next link
 
     This will ask agents to determine the validity, loopability, and relativity
@@ -165,7 +166,8 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False, graph=Non
         print(f"Relatability? {relativity}")
 
         ins = templates["keep"].format(
-            choice=choice, goal=goal, relativity=relativity, validity=validity, loop=visit)
+            choice=choice, goal=goal, relativity=relativity,
+            validity=validity, loop=visit)
         out = agent.raw_prompt(ins)
 
         print(f"Decision to keep choice {choice}: {out}")

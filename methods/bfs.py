@@ -2,6 +2,26 @@ from collections import deque, defaultdict
 
 
 def bfs(graph, start, end):
+    """Finds the shortest path between the start and end in the graph
+
+    An implementation of a breath-first search algorithm to find the shortest
+    path between two vertices in the graph.
+
+    Parameters
+    ----------
+    graph : defaultdict
+        A dictionary where the key is a link and the value is a set containing
+        all possible links from the key link
+    start : str
+        The starting page in the graph
+    end : str
+        The ending page in the graph
+
+    Returns
+    -------
+    list
+        A list of a shortest path from the start to the end
+    """
     explored = set()
     queue = deque()
     queue.append(start)

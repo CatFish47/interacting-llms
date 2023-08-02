@@ -3,8 +3,8 @@ from .singular import prompt_agent, validate_resp
 from .ensemble import prompt_ensemble
 
 
-def prompt_dc(max_per, agent, goal, links, desc, graph, template='general', bads=[],
-              stack=False, ensemble_num=3):
+def prompt_dc(max_per, agent, goal, links, desc, graph, template='general',
+              bads=[], stack=False, ensemble_num=3):
     """Queries a hierarchy of agents for the next link
 
     Splits the possible links into groups of links, where the max number of
