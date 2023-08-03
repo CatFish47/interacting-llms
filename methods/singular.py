@@ -1,3 +1,4 @@
+from random import shuffle
 from .utils import format_options
 from .templates import templates
 
@@ -30,6 +31,10 @@ def prompt_agent(agent, goal, links, desc, template='general', bads=[]):
     str
         The link that the agent suggests clicking on
     """
+
+    links = list(links)
+
+    shuffle(links)
 
     links_str = format_options(links)
     bads_str = format_options(bads)

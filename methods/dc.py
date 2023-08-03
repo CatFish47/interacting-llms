@@ -51,14 +51,25 @@ def prompt_dc(max_per, agent, goal, links, desc, graph, template='general',
     while len(pool) > 1:
         new_pool = []
 
-        for i in range(ceil(len(pool) / max_per)):
-            mini_pool = pool[i * max_per: min((i + 1) * max_per, len(pool))]
+        num_pools = ceil(len(pool) / max_per)
+
+        for i in range(num_pools):
+            amt_per = ceil(len(pool) / num_pools)
+
+            mini_pool = pool[i * amt_per: min((i + 1) * amt_per, len(pool))]
 
             output = ''
 
             if stack:
-                output = prompt_ensemble(
-                    ensemble_num, agent, goal, mini_pool, desc, template, bads)
+                if len(set(mini_pool) & set(bads)) > 0:
+                    output = prompt_ensemble(
+                        ensemble_num, agent, goal,
+                        set(mini_pool) - set(bads),
+                        desc, template, bads)
+                else:
+                    output = prompt_ensemble(
+                        ensemble_num, agent, goal, mini_pool, desc,
+                        template='general')
             else:
                 output = prompt_agent(
                     agent, goal, mini_pool, desc, template, bads)

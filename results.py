@@ -1,9 +1,5 @@
 import json
 
-empty_data = {'start': "", 'goal': "", 'bfs': [], 'astar': [],
-              'singular': [], 'ensemble': [], 'dc': [], 'consult': [],
-              'stack': []}
-
 
 def save_results(start, goal, bfs=None, astar=None, singular=None, ensemble=None, dc=None, consult=None, stack=None, path="results.json"):
     data = None
@@ -13,8 +9,6 @@ def save_results(start, goal, bfs=None, astar=None, singular=None, ensemble=None
             data = json.load(file_object)
     except FileNotFoundError as e:
         data = {'data': []}
-
-    results = empty_data.copy()
 
     results = {
         'start': start,

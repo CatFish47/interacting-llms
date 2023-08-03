@@ -86,7 +86,7 @@ def consult_relativity(agent, goal, choice, desc):
     """
     ins = templates["related"].format(
         desc=desc, goal=goal, choice=choice)
-    out = agent.raw_prompt(ins, max_len=100)
+    out = agent.raw_prompt(ins, max_len=200)
 
     ins = templates["goodbad"].format(
         summary=out, choice=choice, goal=goal)
@@ -141,13 +141,12 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
         temp = 'general' if i == 0 else 'consulted'
 
         choice = ''
-        new_links = links - set(bads)
 
         if stack:
-            choice = prompt_dc(max_per, agent, goal, new_links, desc,
+            choice = prompt_dc(max_per, agent, goal, links, desc,
                                graph, temp, bads, stack, ensemble_num)
         else:
-            choice = prompt_agent(agent, goal, new_links, desc, temp, bads)
+            choice = prompt_agent(agent, goal, links, desc, temp, bads)
 
         print("Which link do you pick?")
         print(choice)

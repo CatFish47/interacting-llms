@@ -5,7 +5,11 @@ from collections import deque
 
 def blacklisted_title(title):
     banned_words = ["Portal:", "User:", "Wikipedia:",
-                    "Help:", "Template:", "Module:", "Template talk:", "File:"]
+                    "Help:", "Template:", "Module:", "Template talk:", "File:",
+                    "Category:", "(identifier)"]
+
+    banned_words.extend([ch for ch in title if not ord(ch) < 128])
+
     for w in banned_words:
         if w in title:
             return True

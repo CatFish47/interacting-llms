@@ -4,7 +4,7 @@ Context: You are playing Wikipedia race, a game where you try to get from one Wi
 OPTIONS:
 {links}
 
-From the options, pick the one closest to "{goal}".
+Select the option most related to "{goal}".
 """
 
 loop_template = """
@@ -52,17 +52,24 @@ Is "{choice}" a valid choice?
 """
 
 rel_template = """
-Context: You are playing Wikipedia race, a game where you try to get from one Wikipedia page to another by only clicking links on the Wikipedia page. Your goal is to get to "{goal}". "{goal}" is summarized by the following: {desc}
+Context: You are trying to determine if "{choice}" is related to "{goal}". "{goal}" is summarized by the following: {desc}
 
-How are "{choice}" and "{goal}" related or unrelated? Provide reasoning.
+How are "{choice}" and "{goal}" related or unrelated. Provide reasoning.
 """
 
 conf_template = """
 Context: You are playing Wikipedia race, a game where you try to get from one Wikipedia page to another by only clicking links on the Wikipedia page. Your goal is to get to the page "{goal}". "{goal}" is summarized by the following: {desc}
 
+Here's what each number of the confidence scale means:
+A 1 means that you are certain that "{choice}" and "{goal}" have nothing to do with each other.
+A 2 means that "{choice}" and "{goal}" are probably not related.
+A 3 means that you think "{choice}" could be related to "{goal}".
+A 4 means that are are certain that "{choice}" and "{goal}" are related.
+A 5 means that "{choice}" and "{goal}" are the same.
+
 OPTIONS: 1, 2, 3, 4, 5
 
-Where 1 is least confident and 5 is most confident, rate your confidence on a scale of 1 to 5 that "{choice}" is related to "{goal}".
+Rate your confidence on a scale of 1 to 5 that "{choice}" is related to or the same as "{goal}".
 """
 
 summary_template = """
@@ -74,7 +81,7 @@ What is "{page}"?
 goodbad_template = """
 Context: You are playing Wikipedia race, a game where you try to get from one Wikipedia page to another by only clicking links on the Wikipedia page. Your goal is to get to the page "{goal}".
 
-{summary}
+You have determined this about the relationship between "{choice}" and "{goal}": {summary}
 
 OPTIONS:
 - related
@@ -86,9 +93,9 @@ Is "{choice}" a related or unrelated choice to get to "{goal}"?
 keep_template = """
 Context: You are playing Wikipedia race, a game where you try to get from one Wikipedia page to another by only clicking links on the Wikipedia page. Your goal is to get to the page "{goal}". You chose the link "{choice}".
 
-The validity of a link is very important, since if the link isn't valid you can't click it. Is "{choice}" a valid link? {validity}
-Visiting a link previously is also important, since we want to avoid loops. Based on previously visited links, you've determined that "{choice}" is a {loop} decision.
 Finally, whether a link is related or not to the goal "{goal}" is important too, otherwise you might not get there. Based on relativity, it has been determined that "{choice}" is a {relativity} choice.
+The validity of a link is the most important, since if the link isn't valid you can't click it. "{choice}" is a {validity} link.
+Visiting a link previously is also important, since we want to avoid loops. You've determined that "{choice}" is a {loop} decision.
 
 OPTION:
 - yes

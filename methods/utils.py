@@ -157,6 +157,10 @@ def get_summary(page, agent):
     inputs = templates['summary'].format(page=page, desc=desc)
     summary = agent.raw_prompt(inputs, max_len=200)
 
+    print(inputs)
+    print(summary)
+    print("===")
+
     return summary
 
 
@@ -174,9 +178,9 @@ def setup():
     agent = AgentFlan()
 
     graph = get_pruned_graph('wikiscrape/graph.pkl')
-    # start = rand_start(graph)
-    # end = rand_start(graph)
-    start, end = ("Bacon soup", "Ostrich meat")
+    start = rand_start(graph)
+    end = rand_start(graph)
+    start, end = ("The Bacon Cookbook", "Pinky and Perky")
 
     desc = get_summary(end, agent)
 

@@ -1,4 +1,3 @@
-from random import shuffle
 from collections import Counter
 from .templates import templates
 from .singular import prompt_agent
@@ -38,12 +37,9 @@ def prompt_ensemble(num, agent, goal, links, desc, template='general',
         The link that the agent suggests clicking on
     """
 
-    links = list(links)
     cnt = Counter()
 
     for _ in range(num):
-        shuffle(links)
-
         output = prompt_agent(agent, goal, links, desc, template, bads)
 
         inputs_conf = templates["confidence"].format(goal=goal, choice=output,
