@@ -8,6 +8,36 @@ from .stack import prompt_stack
 
 
 def run_method(method, agent, start, end, desc, graph, iters=10):
+    """Runs a specific LLM method
+
+    Runs a method to continuously ask the method for the next suggested link
+    to click.
+
+    Parameters
+    ----------
+    method : str
+        The method to use. Choice between 'singular', 'ensemble', 'dc',
+        'consult', and 'stack'
+    agent : Agent
+        The agent to ask the questions to
+    start : str
+        The start page
+    end : str
+        The goal page
+    desc : str
+        The description of the goal page
+    graph : defaultdict
+        The graph that provides all possible links to click from a given page
+    iters : int, optional
+        The maximum number of times that the method should be prompted which
+        link it thinks it should click
+
+    Returns
+    -------
+    list
+        The path that the method follows until the method terminates
+    """
+
     curr = start
     path = [curr]
 
@@ -25,7 +55,7 @@ def run_method(method, agent, start, end, desc, graph, iters=10):
         elif method == 'consult':
             resp = prompt_consult(3, agent, end, links, desc, path)
         elif method == 'stack':
-            resp = prompt_stack(agent, end, links, desc, path, graph)
+            resp = prompt_stack(agent, end, links, desc, path, graph, iters=2)
         else:
             resp = ""
             print("Invalid method")

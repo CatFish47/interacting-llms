@@ -16,8 +16,6 @@ def blacklisted_title(title):
 
     return False
 
-# Print iterations progress
-
 
 def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
     """
@@ -37,14 +35,13 @@ def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
-    # Print New Line on Complete
     if iteration == total:
         print()
 
 
 def extend(graph):
     wiki_wiki = wikipediaapi.Wikipedia(
-        f'More Degrees of Bacon (gxcheng@ucsd.edu)', 'en')
+        f'More Degrees of Bacon', 'en')
 
     explored_links = set(graph.keys())
     all_links = set()

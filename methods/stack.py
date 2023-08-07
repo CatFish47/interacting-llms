@@ -1,7 +1,7 @@
 from .consult import prompt_consult
 
 
-def prompt_stack(agent, goal, links, desc, path, graph, iters=3, max_per=10,
+def prompt_stack(agent, goal, links, desc, path, graph, iters=2, max_per=20,
                  ensemble_num=3):
     """Queries agents from consult, divide and conquer, and ensemble
 

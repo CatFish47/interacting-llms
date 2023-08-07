@@ -173,9 +173,9 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
             print(f"Decision to keep choice {choice}: {out}")
             print("-=-")
 
-        if out.lower() == "yes":
-            break
+            if out.lower() == "yes":
+                break
 
-        bads.append(choice)
+            bads.append(choice)
 
     return choice

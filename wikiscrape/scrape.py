@@ -3,7 +3,6 @@ import pickle
 from collections import deque, defaultdict
 
 
-# Print iterations progress
 def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, length=100, fill='█', printEnd="\r"):
     """
     Call in a loop to create terminal progress bar
@@ -22,7 +21,6 @@ def print_progress_bar(iteration, total, prefix='', suffix='', decimals=1, lengt
     filledLength = int(length * iteration // total)
     bar = fill * filledLength + '-' * (length - filledLength)
     print(f'\r{prefix} |{bar}| {percent}% {suffix}', end=printEnd)
-    # Print New Line on Complete
     if iteration == total:
         print()
 
@@ -39,7 +37,7 @@ def blacklisted_title(title):
 
 def link_degrees(start, degrees):
     wiki_wiki = wikipediaapi.Wikipedia(
-        f'{degrees} Degrees of Bacon (gxcheng@ucsd.edu)', 'en')
+        f'{degrees} Degrees of Bacon', 'en')
     all_links = set()
     queue = deque()
     graph = defaultdict(set)
