@@ -3,12 +3,14 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 
 class AgentGodel:
     def __init__(self, instruction):
-        """
-        Constructor method that initializes the Godel agent.
+        """Constructor method that initializes the Godel agent
 
-        Args:
-            instruction (string): instrucs for how the agent should respond
+        Parameters
+        ----------
+            instruction : str
+                instructions for how the agent should respond
         """
+
         self.tokenizer = AutoTokenizer.from_pretrained(
             "microsoft/GODEL-v1_1-large-seq2seq")
         self.model = AutoModelForSeq2SeqLM.from_pretrained(
@@ -18,25 +20,32 @@ class AgentGodel:
         self.instruction = instruction
 
     def set_instruction(self, instruction):
-        """
-        Sets the instruction for Godel
+        """Sets the instruction for Godel
 
-        Args:
-            instruction (string): instrucs for how the agent should respond
+        Parameters
+        ----------
+            instruction : str
+                instructions for how the agent should respond
         """
+
         self.instruction = instruction
 
     def prompt(self, question, knowledge=None):
-        """
-        Prompts the agent
+        """Prompts the agent
 
-        Args:
-            question (string): the user prompt for the agent.
-            knowledge (string): any relevant knowledge to answer the question
+        Parameters
+        ----------
+            question : str
+                the user prompt for the agent
+            knowledge : str
+                any relevant knowledge to answer the question
 
-        Returns:
-            (string): the response of the agent
+        Returns
+        -------
+        str
+            the response of the agent
         """
+
         self.context.append(question)
         if knowledge is not None:
             self.knowledge = knowledge
@@ -52,10 +61,8 @@ class AgentGodel:
         self.context.append(output)
 
         return output
-    
+
     def clear_context(self):
-        """
-        Clears the context
-        """
+        """Clears the context"""
 
         self.context = []
