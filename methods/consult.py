@@ -151,26 +151,27 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
         print("Which link do you pick?")
         print(choice)
 
-        print("---")
+        if i < iters - 1:
+            print("---")
 
-        print(f"Testing choice: {choice}...")
+            print(f"Testing choice: {choice}...")
 
-        validity = consult_validity(agent, links, choice)
-        print(f"Valid? {validity}")
+            validity = consult_validity(agent, links, choice)
+            print(f"Valid? {validity}")
 
-        visit = consult_loop(agent, goal, choice, desc, path)
-        print(f"Non-loopability? {visit}")
+            visit = consult_loop(agent, goal, choice, desc, path)
+            print(f"Non-loopability? {visit}")
 
-        relativity = consult_relativity(agent, goal, choice, desc)
-        print(f"Relatability? {relativity}")
+            relativity = consult_relativity(agent, goal, choice, desc)
+            print(f"Relatability? {relativity}")
 
-        ins = templates["keep"].format(
-            choice=choice, goal=goal, relativity=relativity,
-            validity=validity, loop=visit)
-        out = agent.raw_prompt(ins)
+            ins = templates["keep"].format(
+                choice=choice, goal=goal, relativity=relativity,
+                validity=validity, loop=visit)
+            out = agent.raw_prompt(ins)
 
-        print(f"Decision to keep choice {choice}: {out}")
-        print("-=-")
+            print(f"Decision to keep choice {choice}: {out}")
+            print("-=-")
 
         if out.lower() == "yes":
             break

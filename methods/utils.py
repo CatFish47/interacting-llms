@@ -180,7 +180,7 @@ def setup():
     graph = get_pruned_graph('wikiscrape/graph.pkl')
     start = rand_start(graph)
     end = rand_start(graph)
-    start, end = ("The Bacon Cookbook", "Pinky and Perky")
+    # start, end = ("The Bacon Cookbook", "Pinky and Perky")
 
     desc = get_summary(end, agent)
 
