@@ -93,7 +93,7 @@ Is "{choice}" a related or unrelated choice to get to "{goal}"?
 keep_template = """
 Context: You are playing Wikipedia race, a game where you try to get from one Wikipedia page to another by only clicking links on the Wikipedia page. Your goal is to get to the page "{goal}". You chose the link "{choice}".
 
-Finally, whether a link is related or not to the goal "{goal}" is important too, otherwise you might not get there. Based on relativity, it has been determined that "{choice}" is a {relativity} choice.
+Finally, whether a link is related or not to the goal "{goal}" is important too, otherwise you might not get there. Based on relatedness, it has been determined that "{choice}" is a {relativity} choice.
 The validity of a link is the most important, since if the link isn't valid you can't click it. "{choice}" is a {validity} link.
 Visiting a link previously is also important, since we want to avoid loops. You've determined that "{choice}" is a {loop} decision.
 
