@@ -112,7 +112,7 @@ def format_title(s):
     return '\n'.join(lines)
 
 
-def format_results(path, width, goal, title):
+def format_results(results, width, goal, title):
     """Formats results of a runned method and includes information on the run
 
     Formats the results in console for easy reading. Surrounds the results in
@@ -121,8 +121,9 @@ def format_results(path, width, goal, title):
 
     Parameters
     ----------
-    path : list
-        The path that the method followed
+    results : dict
+        The dictionary results that includes the path, the time taken, and the
+        number of times the agent was queried
     width : int
         The maximum length of the string
     goal : str
@@ -136,6 +137,9 @@ def format_results(path, width, goal, title):
         The formatted results, ready to print
     """
 
+    path = results["path"]
+    time_taken = results["time"]
+    queries = results["prompts"]
     goal_reach = "Yes" if len(path) == 0 or goal == path[-1] else "No"
 
     c = '*'
@@ -154,6 +158,8 @@ def format_results(path, width, goal, title):
 
     lines.append(middle_txt(f'Reached goal? {goal_reach}', c, width))
     lines.append(middle_txt(f'# of links: {len(path)}', c, width))
+    lines.append(middle_txt(f'Time taken: {time_taken}', c, width))
+    lines.append(middle_txt(f'# of queries: {queries}', c, width))
 
     lines.append(bot_border(c, width))
 

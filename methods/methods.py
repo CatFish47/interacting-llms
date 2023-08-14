@@ -5,6 +5,7 @@ from .ensemble import prompt_ensemble
 from .dc import prompt_dc
 from .consult import prompt_consult
 from .stack import prompt_stack
+import time
 
 
 def run_method(method, agent, start, end, desc, graph, iters=10):
@@ -34,35 +35,43 @@ def run_method(method, agent, start, end, desc, graph, iters=10):
 
     Returns
     -------
-    list
-        The path that the method follows until the method terminates
+    dict
+        The dictionary results that includes the path, the time taken, and the
+        number of times the agent was queried
     """
+
+    start_time = time.time()
+    total_prompts = 0
 
     curr = start
     path = [curr]
 
     for i in range(iters):
         resp = ""
+        num_prompts = 0
 
         links = graph[curr]
 
         if method == 'singular':
-            resp = prompt_agent(agent, end, links, desc)
+            resp, num_prompts = prompt_agent(agent, end, links, desc)
         elif method == 'ensemble':
-            resp = prompt_ensemble(3, agent, end, links, desc)
+            resp, num_prompts = prompt_ensemble(3, agent, end, links, desc)
         elif method == 'dc':
-            resp = prompt_dc(10, agent, end, links, desc, graph)
+            resp, num_prompts = prompt_dc(10, agent, end, links, desc, graph)
         elif method == 'consult':
-            resp = prompt_consult(3, agent, end, links, desc, path)
+            resp, num_prompts = prompt_consult(
+                3, agent, end, links, desc, path)
         elif method == 'stack':
-            resp = prompt_stack(agent, end, links, desc, path, graph, iters=2)
+            resp, num_prompts = prompt_stack(
+                agent, end, links, desc, path, graph, iters=2)
         else:
-            resp = ""
+            resp, num_prompts = ("", 0)
             print("Invalid method")
 
         print(f">> Decision: {resp}")
         print("-=-")
 
+        total_prompts += num_prompts
         path.append(resp)
         validity = validate_resp(resp, curr, end, graph)
 
@@ -76,4 +85,12 @@ def run_method(method, agent, start, end, desc, graph, iters=10):
 
         curr = resp
 
-    return path
+    end_time = time.time()
+
+    res = {
+        "path": path,
+        "time": end_time - start_time,
+        "prompts": total_prompts
+    }
+
+    return res

@@ -20,6 +20,8 @@ As a base, a basic breadth-first search algorithm is implemented to find the gua
 
 ### A\*
 
+**_Note: A\* has not been implemented yet due to complications with determining the heuristics function to compute the distance between two Wikipedia links._**
+
 A\* is implemented as a secondary base algorithm that runs faster than BFS and is highly likely to find the fastest path to from start to end, but isn't guaranteed. The heuristics function that will be used to determine the distance between two nodes will be cosine similarity.
 
 ### Singular LLM
@@ -42,6 +44,22 @@ A\* is implemented as a secondary base algorithm that runs faster than BFS and i
 
 ![Flowchart for stacking LLMs](images/flowchart-stack.jpg)
 
-## Contributors
+## Running the Code
+
+### Setup
+
+To setup, start by creating a conda environment. The code has been tested most extensively with Python 3.10. You may use the following example:
+```bash
+conda create --name wikiracer python=3.10
+```
+
+To install packages, use the `requirements.txt` file with pip:
+```bash
+pip install -r requirements.txt
+```
+
+PyTorch can be machine specific, so it is not included in the `requirements.txt` file. Please download the appropriate version or PyTorch on their [official website](https://pytorch.org/get-started/locally/).
+
+## Authors
 
 [Grant Cheng](https://github.com/CatFish47)

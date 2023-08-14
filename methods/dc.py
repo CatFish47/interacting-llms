@@ -42,18 +42,22 @@ def prompt_dc(max_per, agent, goal, links, desc, graph, template='general',
 
     Returns
     -------
-    str
-        The link that the agent suggests clicking on
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
 
     pool = list(links)
+    tot_prompts = 0
 
     while len(pool) > 1:
         new_pool = []
+        num_prompts = 0
 
         num_pools = ceil(len(pool) / max_per)
 
         for i in range(num_pools):
+            np = 0
             amt_per = ceil(len(pool) / num_pools)
 
             mini_pool = pool[i * amt_per: min((i + 1) * amt_per, len(pool))]
@@ -62,22 +66,26 @@ def prompt_dc(max_per, agent, goal, links, desc, graph, template='general',
 
             if stack:
                 if len(set(mini_pool) & set(bads)) > 0:
-                    output = prompt_ensemble(
+                    output, np = prompt_ensemble(
                         ensemble_num, agent, goal,
                         set(mini_pool) - set(bads),
                         desc, template, bads)
                 else:
-                    output = prompt_ensemble(
+                    output, np = prompt_ensemble(
                         ensemble_num, agent, goal, mini_pool, desc,
                         template='general')
             else:
-                output = prompt_agent(
+                output, np = prompt_agent(
                     agent, goal, mini_pool, desc, template, bads)
+
+            num_prompts += np
 
             if validate_resp(output, '', goal, graph, mini_pool) < 0:
                 continue
 
             new_pool.append(output)
+
+        tot_prompts += num_prompts
 
         pool = new_pool
         print(pool)
@@ -87,4 +95,4 @@ def prompt_dc(max_per, agent, goal, links, desc, graph, template='general',
         print("Decision failed. Pool size reached 0.")
         return ""
 
-    return pool[0]
+    return pool[0], tot_prompts

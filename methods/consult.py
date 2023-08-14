@@ -18,14 +18,15 @@ def consult_validity(agent, links, choice):
 
     Returns
     -------
-    str
-        "valid" or "invalid" depending on if the link was valid or not
+    str, int
+        "valid" or "invalid" depending on if the link was valid or not, and the
+        number of queries made to the agent
     """
     links_str = format_options(links)
     ins = templates["valid"].format(links=links_str, choice=choice)
     out = agent.raw_prompt(ins)
 
-    return out
+    return out, 1
 
 
 def consult_loop(agent, goal, choice, desc, path):
@@ -46,9 +47,9 @@ def consult_loop(agent, goal, choice, desc, path):
 
     Returns
     -------
-    str
+    str, int
         "good" or "bad" depending on if the choice will cause a loop or is
-        necessary regardless
+        necessary regardless, and the number of queries made to the agent
     """
     path_str = format_options(path)
 
@@ -62,7 +63,7 @@ def consult_loop(agent, goal, choice, desc, path):
     ins = templates["visit"].format(context=out, choice=choice)
     out = agent.raw_prompt(ins)
 
-    return out
+    return out, 3
 
 
 def consult_relativity(agent, goal, choice, desc):
@@ -81,8 +82,9 @@ def consult_relativity(agent, goal, choice, desc):
 
     Returns
     -------
-    str
-        "related" or "unrelated" depending on if the choice was related or not
+    str, int
+        "related" or "unrelated" depending on if the choice was related or not,
+        and the number of queries made to the agent
     """
     ins = templates["related"].format(
         desc=desc, goal=goal, choice=choice)
@@ -92,7 +94,7 @@ def consult_relativity(agent, goal, choice, desc):
         summary=out, choice=choice, goal=goal)
     out = agent.raw_prompt(ins)
 
-    return out
+    return out, 2
 
 
 def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
@@ -130,23 +132,28 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
 
     Returns
     -------
-    str
-        The link that the agent suggests clicking on
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
 
     choice = ""
     bads = []
+    tot_prompts = 0
 
     for i in range(iters):
+        num_prompts = 0
         temp = 'general' if i == 0 else 'consulted'
 
         choice = ''
 
         if stack:
-            choice = prompt_dc(max_per, agent, goal, links, desc,
-                               graph, temp, bads, stack, ensemble_num)
+            choice, num_prompts = prompt_dc(max_per, agent, goal, links, desc,
+                                            graph, temp, bads, stack,
+                                            ensemble_num)
         else:
-            choice = prompt_agent(agent, goal, links, desc, temp, bads)
+            choice, num_prompts = prompt_agent(
+                agent, goal, links, desc, temp, bads)
 
         print("Which link do you pick?")
         print(choice)
@@ -156,26 +163,34 @@ def prompt_consult(iters, agent, goal, links, desc, path, stack=False,
 
             print(f"Testing choice: {choice}...")
 
-            validity = consult_validity(agent, links, choice)
+            validity, np = consult_validity(agent, links, choice)
+            num_prompts += np
             print(f"Valid? {validity}")
 
-            visit = consult_loop(agent, goal, choice, desc, path)
+            visit, np = consult_loop(agent, goal, choice, desc, path)
+            num_prompts += np
             print(f"Non-loopability? {visit}")
 
-            relativity = consult_relativity(agent, goal, choice, desc)
-            print(f"Relatability? {relativity}")
+            relatedness, np = consult_relativity(agent, goal, choice, desc)
+            num_prompts += np
+            print(f"Relatedness? {relatedness}")
 
             ins = templates["keep"].format(
-                choice=choice, goal=goal, relativity=relativity,
+                choice=choice, goal=goal, relativity=relatedness,
                 validity=validity, loop=visit)
             out = agent.raw_prompt(ins)
+            num_prompts += 1
 
             print(f"Decision to keep choice {choice}: {out}")
             print("-=-")
+
+            tot_prompts += num_prompts
 
             if out.lower() == "yes":
                 break
 
             bads.append(choice)
+        else:
+            tot_prompts += num_prompts
 
-    return choice
+    return choice, tot_prompts

@@ -28,8 +28,9 @@ def prompt_agent(agent, goal, links, desc, template='general', bads=[]):
 
     Returns
     -------
-    str
-        The link that the agent suggests clicking on
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
 
     links = list(links)
@@ -43,7 +44,7 @@ def prompt_agent(agent, goal, links, desc, template='general', bads=[]):
         goal=goal, links=links_str, desc=desc, choices=bads_str)
     output = agent.raw_prompt(inputs)
 
-    return output
+    return output, 1
 
 
 def validate_resp(resp, curr, goal, graph, links=None):

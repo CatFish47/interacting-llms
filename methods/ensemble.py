@@ -33,21 +33,27 @@ def prompt_ensemble(num, agent, goal, links, desc, template='general',
 
     Returns
     -------
-    str
-        The link that the agent suggests clicking on
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
 
     cnt = Counter()
 
+    tot_prompts = 0
+
     for _ in range(num):
-        output = prompt_agent(agent, goal, links, desc, template, bads)
+        output, num_prompts = prompt_agent(
+            agent, goal, links, desc, template, bads)
 
         inputs_conf = templates["confidence"].format(goal=goal, choice=output,
                                                      desc=desc)
         output_conf = int(agent.raw_prompt(inputs_conf))
+        num_prompts += 1
 
         cnt[output] += output_conf
+        tot_prompts += 1
 
     print(cnt.most_common())
 
-    return cnt.most_common(1)[0][0]
+    return cnt.most_common(1)[0][0], tot_prompts

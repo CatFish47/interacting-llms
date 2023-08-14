@@ -10,20 +10,20 @@ def save_results(start, goal, bfs=None, astar=None, singular=None, ensemble=None
         The start page
     goal : str
         The end/goal page
-    bfs : list, optional
-        The path that the BFS method followed
-    astar : list, optional
-        The path that the A* method followed
-    singular : list, optional
-        The path that the singular LLM method followed
-    ensemble : list, optional
-        The path that the ensemble method followed
-    dc : list, optional
-        The path that the divide and conquer method followed
-    consult : list, optional
-        The path that the consult method followed
-    stack : list, optional
-        The path that the stack method followed
+    bfs : dict, optional
+        The results of the BFS method
+    astar : dict, optional
+        The results of the A* method
+    singular : dict, optional
+        The results of the singular LLM method
+    ensemble : dict, optional
+        The results of the ensemble method
+    dc : dict, optional
+        The results of the divide and conquer method
+    consult : dict, optional
+        The results of the consult method
+    stack : dict, optional
+        The results of the stack method
     path : str, optional
         The file path to save the file to. By default, it is "results.json"
 
@@ -40,6 +40,10 @@ def save_results(start, goal, bfs=None, astar=None, singular=None, ensemble=None
             data = json.load(file_object)
     except FileNotFoundError as e:
         data = {'data': []}
+
+    methods = ['bfs', 'astar', 'singular',
+               'ensemble', 'dc', 'consult', 'stack']
+    metrics = ['path', 'time', 'prompts']
 
     results = {
         'start': start,

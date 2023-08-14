@@ -1,4 +1,5 @@
 from collections import deque, defaultdict
+import time
 
 
 def bfs(graph, start, end):
@@ -19,9 +20,19 @@ def bfs(graph, start, end):
 
     Returns
     -------
-    list
-        A list of a shortest path from the start to the end
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
+
+    start_time = time.time()
+
+    results = {
+        "path": [],
+        "time": 0,
+        "prompts": 0
+    }
+
     explored = set()
     queue = deque()
     queue.append(start)
@@ -40,7 +51,11 @@ def bfs(graph, start, end):
                     res.insert(0, cur_res)
                     cur_res = parents[cur_res]
 
-                return res
+                end_time = time.time()
+                results["path"] = res
+                results["time"] = end_time - start_time
+
+                return results
 
             if curr in explored:
                 continue
@@ -54,4 +69,7 @@ def bfs(graph, start, end):
                     if parents[node] == "":
                         parents[node] = curr
 
-    return []
+    end_time = time.time()
+    results["time"] = end_time - start_time
+
+    return results

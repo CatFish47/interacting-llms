@@ -33,8 +33,9 @@ def prompt_stack(agent, goal, links, desc, path, graph, iters=2, max_per=20,
 
     Returns
     -------
-    str
-        The link that the agent suggests clicking on
+    str, int
+        The link that the agent suggests clicking on and the number of times
+        the agent was prompted
     """
 
     return prompt_consult(iters, agent, goal, links, desc, path, True, graph,
